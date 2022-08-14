@@ -1,1 +1,3 @@
 É só uma arquivo de texto para testar o acesso ao GitHub.
+
+Outra alteração para, mais um teste do acesso ao Git.
