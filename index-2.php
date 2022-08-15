@@ -14,7 +14,6 @@
 #echo "<br>" . PHP_EOL;
 
 $metodoSoliciado = $_SERVER['REQUEST_METHOD'] ?? 'GET';
-
 $caminhoSoliciado = $_SERVER['REQUEST_URI'] ?? '/';
 
 #echo "<p>O método é: <b>" . $metodoSoliciado . "</b></p>" . PHP_EOL;
