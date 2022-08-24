@@ -1,0 +1,15 @@
+{
+    "nome": "silvar/website",
+    "scripts": {
+        "servidor": "php -S 127.0.0.1:8000 -t public"
+    },
+}
+"autoload": {
+    "psr-4": {
+        "Aplic\\": "aplic",
+        "Estrutura\\": "estrutura",
+    }
+},
+"config": {
+    "process-timeout": 0
+}
