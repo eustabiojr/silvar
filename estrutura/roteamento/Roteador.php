@@ -7,6 +7,7 @@
 
 namespace Estrutura\Roteamento;
 
+use Exception;
 use Throwable;
 
 class Roteador
@@ -21,11 +22,17 @@ class Roteador
         return $rota;
     }
 
+    public function manipuladorErro(int $codigo, callable $manipulador) 
+    {
+        $this->manipuladorErros[$codigo] = $manipulador;
+    }
+
     public function despacha()
     {
         $caminhos = $this->caminhos();
-
-        $metodoSolicitacao = $_SERVER['REQUEST_METHOD'] ?? '/';
+       
+        $metodoSolicitacao  = $_SERVER['REQUEST_METHOD'] ?? 'GET';
+        $caminhoSolicitacao = $_SERVER['REQUEST_URI']    ?? '/';
 
         // isto examina através das rotas definidas e retorna
         // o primeiro que corresponde ao método e caminho
@@ -33,18 +40,18 @@ class Roteador
 
         if ($correspondecia) {
             try {
-                // esta ação poderá lançar e exceço 
+                // esta ação poderá lançar a exceção 
                 // sendo assim, pegamos [a exceção] e mostramos o erro global
                 // página que definiremos no arquivo de rotas
                 return $correspondecia->despacha();
             } catch (Throwable $e) {
-                return $this->dispatchError();
+                return $this->despachaErro();
             }
         }
 
         // se o caminho est definido para um método diferente método
         // podemos exibir uma única página de erro para ele
-        if (in_array($caminhoSolicitado, $caminhos)) {
+        if (in_array($caminhoSolicitacao, $caminhos)) {
             return $this->despachaNaoPermitido();
         }
         return $this->despachaNaoEncontrado();
@@ -57,10 +64,15 @@ class Roteador
         foreach ($this->rotas as $rota) {
             $caminhos[] = $rota->caminho();
         }
-
+        
         return $caminhos;
     }
-
+    
+    public function corrente(): ?Rota 
+    {
+        return $this->corrente;
+    }
+    
     private function corresponde(string $metodo, string $caminho): ?Rota
     {
         foreach ($this->rotas as $rota) {
@@ -72,11 +84,6 @@ class Roteador
         return null;
     }
 
-    public function manipuladorErro(int $codigo, callable $manipulador) 
-    {
-        $this->manipuladorErros[$codigo] = $manipulador;
-    }
-
     public function despachaNaoPermitido()
     {
         $this->manipuladorErros[400] ??= fn() => "Não permitido";
@@ -86,6 +93,8 @@ class Roteador
 
     public function despachaNaoEncontrado()
     {
+        # $this->manipuladorErros[404] = $this->manipuladorErros[404] ? $this->manipuladorErros[404] : fn() => "Não encontrado";
+        # $this->manipuladorErros[404] = $this->manipuladorErros[404] ?? fn() => "Não encontrado";
         $this->manipuladorErros[404] ??= fn() => "Não encontrado";
 
         return $this->manipuladorErros[404]();
@@ -94,6 +103,7 @@ class Roteador
     public function despachaErro()
     {
         $this->manipuladorErros[500] ??= fn() => "erro no servidor";
+        return $this->manipuladorErros[500]();
     }
 
     public function redireciona($caminho) 
@@ -102,8 +112,4 @@ class Roteador
         exit;
     }
 
-    public function corrente(): ?Rota 
-    {
-        return $this->corrente;
-    }
 }

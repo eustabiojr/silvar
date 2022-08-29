@@ -94,6 +94,6 @@ if (isset(
 }
 
 echo '<pre>' . PHP_EOL;
-echo "<p><a href=\"outro.php\">Outro</a></p>" . PHP_EOL;
-echo "<p><a href=\"funcao_linha.php\">Função em Linha</a></p>" . PHP_EOL;
+echo "<p><a href=\"codigos\">Códigos</a></p>" . PHP_EOL;
+echo "<p><a href=\"laboratorio/\">Laboratório</a></p>" . PHP_EOL;
 echo '</pre>' . PHP_EOL;

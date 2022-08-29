@@ -34,10 +34,11 @@ return function(Roteador $roteador) {
         'GET', '/produtos/visao/{produto}',
         function() use ($roteador) {
             $parametros = $roteador->corrente()->parametros();
-            return "produto é {$parametros['produot']}";
+            return "produto é {$parametros['produto']}";
         },
     );
 
+    /* digitado em 28-08-2022 */
     $roteador->adic(
         'GET', '/servicos/visao/{servico}',
         function() use ($roteador) {
@@ -48,6 +49,27 @@ return function(Roteador $roteador) {
             }
 
             return "serviço é {$parametros['servico']}";
+        },
+    );
+
+    $roteador->adic(
+        'GET', '/produtos/visao/{produto}',
+        function() use ($roteador) {
+            $parametros = $roteador->corrente()->parametros();
+            return "produto é {$parametros['produto']}";
+        },
+    );
+
+    $roteador->adic(
+        'GET', '/servicos/visao/{servico}',
+        function() use ($roteador) {
+            $parametros = $roteador->corrente()->parametros();
+
+            if (empty($parametros['servico'])) {
+                return 'todos os serviços';
+            }
+
+            return "o serviço é {$parametros['servico']}";
         },
     );
 };

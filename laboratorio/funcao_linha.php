@@ -12,6 +12,13 @@
     return $param * 3;
 };*/
 
-$var = fn($param) => $param * 3;
+$fator = 3;
 
-echo $var(5);
+$var1 = fn($param) => $param * $fator; // note que não precisamos usa 'use' como quando usamos 'function'
+
+# aqui temos uma função como comum (ou não linha)
+$var2 = function($param) use ($fator) {
+    return $param * $fator;
+};
+
+echo $var2(5);
